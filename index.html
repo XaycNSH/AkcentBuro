@@ -159,7 +159,6 @@
             color: white; font-size: 0.8rem; font-weight: 400; letter-spacing: 0.5px;
         }
 
-        /* Item sizes */
         .item-lg { grid-column: span 3; grid-row: span 4; }
         .item-md { grid-column: span 2; grid-row: span 3; }
         .item-sm { grid-column: span 2; grid-row: span 2; }
@@ -169,7 +168,14 @@
 
         /* Services */
         .services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
-        .service-card { padding: 40px; }
+        .service-card {
+            padding: 40px;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            background: var(--color-white);
+            transition: var(--transition);
+        }
+        .service-card:hover { box-shadow: var(--shadow-md); border-color: var(--color-primary); }
         .service-card h3 {
             font-family: 'Playfair Display', serif;
             font-size: 1.4rem; font-weight: 400; margin-bottom: 16px;
@@ -213,15 +219,6 @@
         .btn-text:hover { color: var(--color-primary-dark); }
         .btn-text svg { width: 14px; height: 14px; }
 
-        /* Dark service */
-        .service-dark {
-            background: var(--color-text); color: var(--color-white); border-radius: var(--radius);
-        }
-        .service-dark h3 { color: var(--color-white); }
-        .service-dark p { color: rgba(255,255,255,0.6); }
-        .service-dark .feature-list li { color: rgba(255,255,255,0.7); }
-        .service-dark .price { color: var(--color-primary-light); }
-
         /* Tariffs */
         .tariffs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
         .tariff-card {
@@ -246,7 +243,7 @@
 
         /* Support */
         .support-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
-        .support-card { padding: 40px; border: 1px solid var(--color-border); border-radius: var(--radius); }
+        .support-card { padding: 40px; border: 1px solid var(--color-border); border-radius: var(--radius); background: var(--color-white); }
         .support-card h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 400; margin-bottom: 16px; }
         .support-card p { color: var(--color-text-secondary); font-size: 0.9rem; line-height: 1.7; margin-bottom: 16px; }
 
@@ -443,43 +440,34 @@
                 которые вдохновляют каждый день.
             </p>
             <div class="portfolio-grid reveal">
-                <!-- Row 1: 3 large -->
                 <div class="portfolio-item item-lg"><img src="https://placehold.co/800x640/E0DAE2/6B6B80?text=Проект+1" alt=""><div class="portfolio-overlay"><span>Квартира 120 м² · Москва</span></div></div>
                 <div class="portfolio-item item-lg"><img src="https://placehold.co/800x640/2C51D3/FFFFFF?text=Проект+2" alt=""><div class="portfolio-overlay"><span>Дом 280 м² · Подмосковье</span></div></div>
                 <div class="portfolio-item item-lg"><img src="https://placehold.co/800x640/F0EDF5/6B6B80?text=Проект+3" alt=""><div class="portfolio-overlay"><span>Пентхаус 200 м² · Санкт-Петербург</span></div></div>
-                <!-- Row 2 -->
                 <div class="portfolio-item item-sm"><img src="https://placehold.co/600x400/E8E4ED/6B6B80?text=Проект+4" alt=""><div class="portfolio-overlay"><span>Студия 45 м²</span></div></div>
                 <div class="portfolio-item item-sm"><img src="https://placehold.co/600x400/2C51D3/FFFFFF?text=Проект+5" alt=""><div class="portfolio-overlay"><span>Кухня-гостиная</span></div></div>
                 <div class="portfolio-item item-md"><img src="https://placehold.co/600x400/F0EDF5/6B6B80?text=Проект+6" alt=""><div class="portfolio-overlay"><span>Спальня 28 м²</span></div></div>
-                <!-- Row 3 -->
                 <div class="portfolio-item item-xs"><img src="https://placehold.co/400x320/E0DAE2/6B6B80?text=Проект+7" alt=""><div class="portfolio-overlay"><span>Ванная комната</span></div></div>
                 <div class="portfolio-item item-xs"><img src="https://placehold.co/400x320/2C51D3/FFFFFF?text=Проект+8" alt=""><div class="portfolio-overlay"><span>Прихожая</span></div></div>
                 <div class="portfolio-item item-md"><img src="https://placehold.co/600x400/E8E4ED/6B6B80?text=Проект+9" alt=""><div class="portfolio-overlay"><span>Офисное пространство</span></div></div>
                 <div class="portfolio-item item-lg"><img src="https://placehold.co/800x640/F0EDF5/6B6B80?text=Проект+10" alt=""><div class="portfolio-overlay"><span>Загородный дом 350 м²</span></div></div>
-                <!-- Row 4 -->
                 <div class="portfolio-item item-sm"><img src="https://placehold.co/600x400/2C51D3/FFFFFF?text=Проект+11" alt=""><div class="portfolio-overlay"><span>Детская комната</span></div></div>
                 <div class="portfolio-item item-sm"><img src="https://placehold.co/600x400/E0DAE2/6B6B80?text=Проект+12" alt=""><div class="portfolio-overlay"><span>Кабинет</span></div></div>
                 <div class="portfolio-item item-lg"><img src="https://placehold.co/800x640/E8E4ED/6B6B80?text=Проект+13" alt=""><div class="portfolio-overlay"><span>Ресторан 180 м²</span></div></div>
-                <!-- Row 5 -->
                 <div class="portfolio-item item-md"><img src="https://placehold.co/600x400/F0EDF5/6B6B80?text=Проект+14" alt=""><div class="portfolio-overlay"><span>Апартаменты 90 м²</span></div></div>
                 <div class="portfolio-item item-md"><img src="https://placehold.co/600x400/2C51D3/FFFFFF?text=Проект+15" alt=""><div class="portfolio-overlay"><span>Лофт 140 м²</span></div></div>
                 <div class="portfolio-item item-sm"><img src="https://placehold.co/600x400/E0DAE2/6B6B80?text=Проект+16" alt=""><div class="portfolio-overlay"><span>Гардеробная</span></div></div>
                 <div class="portfolio-item item-sm"><img src="https://placehold.co/600x400/E8E4ED/6B6B80?text=Проект+17" alt=""><div class="portfolio-overlay"><span>Балкон-терраса</span></div></div>
-                <!-- Row 6 -->
                 <div class="portfolio-item item-lg"><img src="https://placehold.co/800x640/2C51D3/FFFFFF?text=Проект+18" alt=""><div class="portfolio-overlay"><span>Вилла 420 м²</span></div></div>
                 <div class="portfolio-item item-md"><img src="https://placehold.co/600x400/F0EDF5/6B6B80?text=Проект+19" alt=""><div class="portfolio-overlay"><span>Таунхаус 160 м²</span></div></div>
                 <div class="portfolio-item item-xs"><img src="https://placehold.co/400x320/E0DAE2/6B6B80?text=Проект+20" alt=""><div class="portfolio-overlay"><span>Санузел</span></div></div>
                 <div class="portfolio-item item-xs"><img src="https://placehold.co/400x320/E8E4ED/6B6B80?text=Проект+21" alt=""><div class="portfolio-overlay"><span>Коридор</span></div></div>
-                <!-- Row 7 -->
                 <div class="portfolio-item item-sm"><img src="https://placehold.co/600x400/2C51D3/FFFFFF?text=Проект+22" alt=""><div class="portfolio-overlay"><span>Гостиная</span></div></div>
                 <div class="portfolio-item item-sm"><img src="https://placehold.co/600x400/F0EDF5/6B6B80?text=Проект+23" alt=""><div class="portfolio-overlay"><span>Столовая</span></div></div>
                 <div class="portfolio-item item-lg"><img src="https://placehold.co/800x640/E0DAE2/6B6B80?text=Проект+24" alt=""><div class="portfolio-overlay"><span>Дуплекс 220 м²</span></div></div>
-                <!-- Row 8 -->
                 <div class="portfolio-item item-md"><img src="https://placehold.co/600x400/E8E4ED/6B6B80?text=Проект+25" alt=""><div class="portfolio-overlay"><span>Библиотека</span></div></div>
                 <div class="portfolio-item item-md"><img src="https://placehold.co/600x400/2C51D3/FFFFFF?text=Проект+26" alt=""><div class="portfolio-overlay"><span>Кинозал</span></div></div>
                 <div class="portfolio-item item-sm"><img src="https://placehold.co/600x400/F0EDF5/6B6B80?text=Проект+27" alt=""><div class="portfolio-overlay"><span>Терраса</span></div></div>
                 <div class="portfolio-item item-sm"><img src="https://placehold.co/600x400/E0DAE2/6B6B80?text=Проект+28" alt=""><div class="portfolio-overlay"><span>Бассейн</span></div></div>
-                <!-- Row 9 -->
                 <div class="portfolio-item item-lg"><img src="https://placehold.co/800x640/2C51D3/FFFFFF?text=Проект+29" alt=""><div class="portfolio-overlay"><span>Пентхаус 300 м²</span></div></div>
                 <div class="portfolio-item item-md"><img src="https://placehold.co/600x400/E8E4ED/6B6B80?text=Проект+30" alt=""><div class="portfolio-overlay"><span>Фитнес-зона</span></div></div>
                 <div class="portfolio-item item-md"><img src="https://placehold.co/600x400/F0EDF5/6B6B80?text=Проект+31" alt=""><div class="portfolio-overlay"><span>Сауна</span></div></div>
@@ -497,15 +485,17 @@
                 <p class="section-subtitle">Гибкие решения для создания идеального интерьера — от планировки до полной реализации</p>
             </div>
             <div class="services-grid">
-                <div class="reveal">
+                <!-- Card 1: Planning - Light Style -->
+                <div class="service-card reveal">
                     <h3>Разработка планировочного решения</h3>
-                    <p>От 3-х вариантов планировки для вашего пространства</p>
+                    <p>Сомневаетесь как правильно зонировать пространство или разместить мебель? Мы разработаем для вас от 3-х вариантов планировочного решения.</p>
                     <ul class="feature-list">
-                        <li>Срок 1 неделя</li>
-                        <li>Удалённо по всему миру</li>
-                        <li>Пакет чертежей для ремонта</li>
-                        <li>Индивидуальная планировка</li>
-                        <li>Нормы согласования</li>
+                        <li>Срок всего лишь 1 неделя</li>
+                        <li>Проект можем сделать в любой точке мира, удаленно</li>
+                        <li>Получаете пакет чертежей для быстрого старта ремонта</li>
+                        <li>Индивидуальная планировка под ваш образ жизни</li>
+                        <li>Учтем все нормы согласования перепланировки</li>
+                        <li>Вы поймете насколько вам комфортно работать с дизайнером</li>
                     </ul>
                     <div class="price">от 800 ₽ <small>/ м²</small></div>
                     <div class="btn-group">
@@ -519,15 +509,20 @@
                         </a>
                     </div>
                 </div>
-                <div class="service-dark reveal">
+
+                <!-- Card 2: Consultation - Same Light Style -->
+                <div class="service-card reveal">
                     <h3>Консультация дизайнера</h3>
-                    <p>Профессиональная консультация по срокам, стилю и бюджету вашего проекта</p>
+                    <p>Собираетесь делать ремонт, в голове куча идей, но не знаете с чего начать? Наш профессиональный дизайнер с удовольствием проконсультирует вас по всем вопросам.</p>
                     <ul class="feature-list">
-                        <li>Сроки разработки проекта</li>
-                        <li>Стиль интерьера</li>
-                        <li>Бюджет на ремонт</li>
-                        <li>Личная встреча или онлайн</li>
+                        <li>По срокам разработки проекта и ремонта</li>
+                        <li>По стилю интерьера</li>
+                        <li>По бюджету на ремонт и дизайн-проект</li>
+                        <li>При личной встрече или онлайн</li>
+                        <li>Бесплатная первичная консультация</li>
+                        <li>Профессиональный подход к каждому клиенту</li>
                     </ul>
+                    <div class="price">Бесплатно</div>
                     <div class="btn-group">
                         <a href="https://wa.me/79001234567?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%9C%D0%B5%D0%BD%D1%8F%20%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D0%B5%D1%81%D1%83%D0%B5%D1%82%20%D0%BA%D0%BE%D0%BD%D1%81%D1%83%D0%BB%D1%8C%D1%82%D0%B0%D1%86%D0%B8%D1%8F%20%D0%B4%D0%B8%D0%B7%D0%B0%D0%B9%D0%BD%D0%B5%D1%80%D0%B0." target="_blank" class="btn btn-whatsapp">
                             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
@@ -797,12 +792,10 @@
 
         document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModalDirect(); closeDetailsModalDirect(); } });
 
-        // Video
         function playVideo() {
             const block = document.getElementById('videoBlock');
             const iframe = document.getElementById('videoIframe');
             block.classList.add('active');
-            // Замените URL на вашу ссылку YouTube/Vimeo
             iframe.src = 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1';
         }
 

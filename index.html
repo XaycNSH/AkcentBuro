@@ -107,11 +107,40 @@
 
         /* Portfolio Grid */
         .portfolio-desc { max-width: 640px; margin: 0 auto 60px; text-align: center; font-size: 0.95rem; color: var(--color-text-secondary); line-height: 1.8; font-weight: 300; }
+        
+        /* Filter Buttons */
+        .portfolio-filters { margin-bottom: 40px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+        .filter-btn {
+            padding: 10px 20px;
+            background: transparent;
+            border: 1px solid var(--color-border);
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+        }
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+        .filter-btn.active { box-shadow: 0 4px 12px rgba(44,81,211,0.25); }
+
         .portfolio-grid { display: grid; grid-template-columns: repeat(6, 1fr); grid-auto-rows: 80px; gap: 12px; }
 
         .portfolio-item {
             position: relative; overflow: hidden; border-radius: var(--radius);
             background: var(--color-lavender); cursor: pointer;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+        .portfolio-item.filtered-out {
+            opacity: 0;
+            transform: scale(0.95);
+            pointer-events: none;
+            position: absolute;
         }
         .portfolio-item img {
             width: 100%; height: 100%; object-fit: cover;
@@ -215,29 +244,14 @@
         .support-card h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 400; margin-bottom: 16px; }
         .support-card p { color: var(--color-text-secondary); font-size: 0.9rem; line-height: 1.7; margin-bottom: 16px; }
 
-        /* Video Block - Responsive */
-        .video-block {
-            position: relative; width: 100%; aspect-ratio: 16/9;
-            background: var(--color-lavender); border-radius: var(--radius);
-            overflow: hidden; margin-bottom: 24px; cursor: pointer;
-        }
-        .video-placeholder {
-            width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
-            background: linear-gradient(135deg, var(--color-lavender) 0%, var(--color-lavender-dark) 100%);
-            position: relative;
-        }
-        .video-play-btn {
-            width: 72px; height: 72px; border-radius: 50%;
-            background: var(--color-primary); display: flex; align-items: center; justify-content: center;
-            transition: var(--transition); box-shadow: 0 8px 30px rgba(44,81,211,0.3);
-        }
+        /* Video Block */
+        .video-block { position: relative; width: 100%; aspect-ratio: 16/9; background: var(--color-lavender); border-radius: var(--radius); overflow: hidden; margin-bottom: 24px; cursor: pointer; }
+        .video-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--color-lavender) 0%, var(--color-lavender-dark) 100%); position: relative; }
+        .video-play-btn { width: 72px; height: 72px; border-radius: 50%; background: var(--color-primary); display: flex; align-items: center; justify-content: center; transition: var(--transition); box-shadow: 0 8px 30px rgba(44,81,211,0.3); }
         .video-play-btn:hover { transform: scale(1.1); box-shadow: 0 12px 40px rgba(44,81,211,0.4); }
         .video-play-btn svg { width: 28px; height: 28px; fill: white; margin-left: 4px; }
         .video-label { position: absolute; bottom: 24px; left: 24px; font-size: 0.78rem; color: var(--color-text-secondary); letter-spacing: 0.5px; }
-        .video-iframe {
-            width: 100%; height: 100%; border: none; position: absolute; inset: 0;
-            display: none; background: #000;
-        }
+        .video-iframe { width: 100%; height: 100%; border: none; position: absolute; inset: 0; display: none; background: #000; }
         .video-block.active .video-placeholder { display: none; }
         .video-block.active .video-iframe { display: block; }
 
@@ -301,6 +315,8 @@
             .item-lg { grid-column: span 3; grid-row: span 2; }
             .item-md, .item-sm, .item-tall, .item-wide { grid-column: span 2; grid-row: span 2; }
             .item-xs { grid-column: span 1; grid-row: span 2; }
+            .portfolio-filters { gap: 8px; }
+            .filter-btn { padding: 8px 16px; font-size: 0.75rem; }
             .stage-item { gap: 20px; padding: 24px 0; }
             .modal { padding: 28px; }
             .lightbox-content img { max-width: 95vw; max-height: 85vh; }
@@ -310,6 +326,8 @@
         @media (max-width: 480px) {
             .footer-links { flex-direction: column; align-items: center; }
             .footer-link { width: 100%; max-width: 260px; justify-content: center; }
+            .portfolio-filters { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 8px; justify-content: flex-start; }
+            .filter-btn { flex-shrink: 0; }
         }
     </style>
 </head>
@@ -342,47 +360,165 @@
         </div>
     </header>
 
+    <!-- Portfolio Section - Filterable Grid -->
     <section class="section" id="portfolio">
         <div class="container">
             <div class="section-header center reveal">
                 <div class="gold-line"></div>
                 <span class="section-label">Портфолио</span>
                 <h2 class="section-title">Наши работы</h2>
+                <p class="section-subtitle">Каждый проект — это уникальная история. Фильтруйте по типу объекта, чтобы найти вдохновение.</p>
             </div>
-            <p class="portfolio-desc reveal">Каждый проект — это уникальная история, в которой мы воплощаем характер и стиль жизни наших клиентов. От минималистичных квартир до роскошных загородных домов — мы создаём пространства, которые вдохновляют каждый день.</p>
-            
-            <div class="portfolio-grid reveal">
-                <div class="portfolio-item item-lg"><img src="images/portfolio/1.jpg" alt="Проект 1" loading="lazy" decoding="async"><div class="portfolio-overlay"><span>Квартира 120 м² · Москва</span></div></div>
-                <div class="portfolio-item item-lg"><img src="images/portfolio/2.jpg" alt="Проект 2" loading="lazy" decoding="async"><div class="portfolio-overlay"><span>Дом 280 м² · Подмосковье</span></div></div>
-                <div class="portfolio-item item-lg"><img src="images/portfolio/3.jpg" alt="Проект 3" loading="lazy" decoding="async"><div class="portfolio-overlay"><span>Пентхаус 200 м² · Санкт-Петербург</span></div></div>
-                <div class="portfolio-item item-sm"><img src="images/portfolio/4.jpg" alt="Проект 4" loading="lazy" decoding="async"><div class="portfolio-overlay"><span>Студия 45 м²</span></div></div>
-                <div class="portfolio-item item-sm"><img src="images/portfolio/5.jpg" alt="Проект 5" loading="lazy" decoding="async"><div class="portfolio-overlay"><span>Кухня-гостиная</span></div></div>
-                <div class="portfolio-item item-md"><img src="images/portfolio/6.jpg" alt="Проект 6" loading="lazy" decoding="async"><div class="portfolio-overlay"><span>Спальня 28 м²</span></div></div>
-                <div class="portfolio-item item-xs"><img src="images/portfolio/7.jpg" alt="Проект 7" loading="lazy" decoding="async"><div class="portfolio-overlay"><span>Ванная комната</span></div></div>
-                <div class="portfolio-item item-xs"><img src="images/portfolio/8.jpg" alt="Проект 8" loading="lazy" decoding="async"><div class="portfolio-overlay"><span>Прихожая</span></div></div>
-                <div class="portfolio-item item-md"><img src="images/portfolio/9.jpg" alt="Проект 9" loading="lazy" decoding="async"><div class="portfolio-overlay"><span>Офисное пространство</span></div></div>
-                <div class="portfolio-item item-lg"><img src="images/portfolio/10.jpg" alt="Проект 10" loading="lazy" decoding="async"><div class="portfolio-overlay"><span>Загородный дом 350 м²</span></div></div>
-                <div class="portfolio-item item-sm"><img src="images/portfolio/11.jpg" alt="Проект 11" loading="lazy" decoding="async"><div class="portfolio-overlay"><span>Детская комната</span></div></div>
-                <div class="portfolio-item item-sm"><img src="images/portfolio/12.jpg" alt="Проект 12" loading="lazy" decoding="async"><div class="portfolio-overlay"><span>Кабинет</span></div></div>
-                <div class="portfolio-item item-lg"><img src="images/portfolio/13.jpg" alt="Проект 13" loading="lazy" decoding="async"><div class="portfolio-overlay"><span>Ресторан 180 м²</span></div></div>
-                <div class="portfolio-item item-md"><img src="images/portfolio/14.jpg" alt="Проект 14" loading="lazy" decoding="async"><div class="portfolio-overlay"><span>Апартаменты 90 м²</span></div></div>
-                <div class="portfolio-item item-md"><img src="images/portfolio/15.jpg" alt="Проект 15" loading="lazy" decoding="async"><div class="portfolio-overlay"><span>Лофт 140 м²</span></div></div>
-                <div class="portfolio-item item-sm"><img src="images/portfolio/16.jpg" alt="Проект 16" loading="lazy" decoding="async"><div class="portfolio-overlay"><span>Гардеробная</span></div></div>
-                <div class="portfolio-item item-sm"><img src="images/portfolio/17.jpg" alt="Проект 17" loading="lazy" decoding="async"><div class="portfolio-overlay"><span>Балкон-терраса</span></div></div>
-                <div class="portfolio-item item-lg"><img src="images/portfolio/18.jpg" alt="Проект 18" loading="lazy" decoding="async"><div class="portfolio-overlay"><span>Вилла 420 м²</span></div></div>
-                <div class="portfolio-item item-md"><img src="images/portfolio/19.jpg" alt="Проект 19" loading="lazy" decoding="async"><div class="portfolio-overlay"><span>Таунхаус 160 м²</span></div></div>
-                <div class="portfolio-item item-xs"><img src="images/portfolio/20.jpg" alt="Проект 20" loading="lazy" decoding="async"><div class="portfolio-overlay"><span>Санузел</span></div></div>
-                <div class="portfolio-item item-xs"><img src="images/portfolio/21.jpg" alt="Проект 21" loading="lazy" decoding="async"><div class="portfolio-overlay"><span>Коридор</span></div></div>
-                <div class="portfolio-item item-sm"><img src="images/portfolio/22.jpg" alt="Проект 22" loading="lazy" decoding="async"><div class="portfolio-overlay"><span>Гостиная</span></div></div>
-                <div class="portfolio-item item-sm"><img src="images/portfolio/23.jpg" alt="Проект 23" loading="lazy" decoding="async"><div class="portfolio-overlay"><span>Столовая</span></div></div>
-                <div class="portfolio-item item-lg"><img src="images/portfolio/24.jpg" alt="Проект 24" loading="lazy" decoding="async"><div class="portfolio-overlay"><span>Дуплекс 220 м²</span></div></div>
-                <div class="portfolio-item item-md"><img src="images/portfolio/25.jpg" alt="Проект 25" loading="lazy" decoding="async"><div class="portfolio-overlay"><span>Библиотека</span></div></div>
-                <div class="portfolio-item item-md"><img src="images/portfolio/26.jpg" alt="Проект 26" loading="lazy" decoding="async"><div class="portfolio-overlay"><span>Кинозал</span></div></div>
-                <div class="portfolio-item item-sm"><img src="images/portfolio/27.jpg" alt="Проект 27" loading="lazy" decoding="async"><div class="portfolio-overlay"><span>Терраса</span></div></div>
-                <div class="portfolio-item item-sm"><img src="images/portfolio/28.jpg" alt="Проект 28" loading="lazy" decoding="async"><div class="portfolio-overlay"><span>Бассейн</span></div></div>
-                <div class="portfolio-item item-lg"><img src="images/portfolio/29.jpg" alt="Проект 29" loading="lazy" decoding="async"><div class="portfolio-overlay"><span>Пентхаус 300 м²</span></div></div>
-                <div class="portfolio-item item-md"><img src="images/portfolio/30.jpg" alt="Проект 30" loading="lazy" decoding="async"><div class="portfolio-overlay"><span>Фитнес-зона</span></div></div>
-                <div class="portfolio-item item-md"><img src="images/portfolio/31.jpg" alt="Проект 31" loading="lazy" decoding="async"><div class="portfolio-overlay"><span>Сауна</span></div></div>
+
+            <!-- Filter Buttons -->
+            <div class="portfolio-filters reveal">
+                <button class="filter-btn active" data-filter="all">Все проекты</button>
+                <button class="filter-btn" data-filter="apartments">Квартиры</button>
+                <button class="filter-btn" data-filter="houses">Дома</button>
+                <button class="filter-btn" data-filter="commercial">Коммерция</button>
+                <button class="filter-btn" data-filter="interiors">Интерьеры</button>
+            </div>
+
+            <!-- Portfolio Grid -->
+            <div class="portfolio-grid reveal" id="portfolioGrid">
+                <!-- Квартиры (1-12) -->
+                <div class="portfolio-item item-lg" data-category="apartments">
+                    <img src="images/portfolio/1.jpg" alt="Квартира 120 м²" loading="lazy" decoding="async">
+                    <div class="portfolio-overlay"><span>Квартира 120 м² · Москва</span></div>
+                </div>
+                <div class="portfolio-item item-sm" data-category="apartments">
+                    <img src="images/portfolio/2.jpg" alt="Студия 45 м²" loading="lazy" decoding="async">
+                    <div class="portfolio-overlay"><span>Студия 45 м² · Москва</span></div>
+                </div>
+                <div class="portfolio-item item-sm" data-category="apartments">
+                    <img src="images/portfolio/3.jpg" alt="Двухкомнатная 68 м²" loading="lazy" decoding="async">
+                    <div class="portfolio-overlay"><span>Двухкомнатная 68 м² · СПб</span></div>
+                </div>
+                <div class="portfolio-item item-md" data-category="apartments">
+                    <img src="images/portfolio/4.jpg" alt="Пентхаус 200 м²" loading="lazy" decoding="async">
+                    <div class="portfolio-overlay"><span>Пентхаус 200 м² · Москва</span></div>
+                </div>
+                <div class="portfolio-item item-xs" data-category="apartments">
+                    <img src="images/portfolio/5.jpg" alt="Лофт 90 м²" loading="lazy" decoding="async">
+                    <div class="portfolio-overlay"><span>Лофт 90 м² · Екатеринбург</span></div>
+                </div>
+                <div class="portfolio-item item-xs" data-category="apartments">
+                    <img src="images/portfolio/6.jpg" alt="Апартаменты 110 м²" loading="lazy" decoding="async">
+                    <div class="portfolio-overlay"><span>Апартаменты 110 м² · Казань</span></div>
+                </div>
+                <div class="portfolio-item item-lg" data-category="apartments">
+                    <img src="images/portfolio/7.jpg" alt="Трешка 85 м²" loading="lazy" decoding="async">
+                    <div class="portfolio-overlay"><span>Трешка 85 м² · Новосибирск</span></div>
+                </div>
+                <div class="portfolio-item item-sm" data-category="apartments">
+                    <img src="images/portfolio/8.jpg" alt="Студия 38 м²" loading="lazy" decoding="async">
+                    <div class="portfolio-overlay"><span>Студия 38 м² · Москва</span></div>
+                </div>
+                <div class="portfolio-item item-sm" data-category="apartments">
+                    <img src="images/portfolio/9.jpg" alt="Двухуровневая 140 м²" loading="lazy" decoding="async">
+                    <div class="portfolio-overlay"><span>Двухуровневая 140 м² · Сочи</span></div>
+                </div>
+                <div class="portfolio-item item-md" data-category="apartments">
+                    <img src="images/portfolio/10.jpg" alt="Квартира в ЖК 75 м²" loading="lazy" decoding="async">
+                    <div class="portfolio-overlay"><span>Квартира в ЖК 75 м² · Москва</span></div>
+                </div>
+                <div class="portfolio-item item-xs" data-category="apartments">
+                    <img src="images/portfolio/11.jpg" alt="Мансарда 55 м²" loading="lazy" decoding="async">
+                    <div class="portfolio-overlay"><span>Мансарда 55 м² · Калининград</span></div>
+                </div>
+                <div class="portfolio-item item-xs" data-category="apartments">
+                    <img src="images/portfolio/12.jpg" alt="Евро-двушка 52 м²" loading="lazy" decoding="async">
+                    <div class="portfolio-overlay"><span>Евро-двушка 52 м² · Ростов</span></div>
+                </div>
+
+                <!-- Дома (13-22) -->
+                <div class="portfolio-item item-lg" data-category="houses">
+                    <img src="images/portfolio/13.jpg" alt="Загородный дом 280 м²" loading="lazy" decoding="async">
+                    <div class="portfolio-overlay"><span>Дом 280 м² · Подмосковье</span></div>
+                </div>
+                <div class="portfolio-item item-md" data-category="houses">
+                    <img src="images/portfolio/14.jpg" alt="Таунхаус 160 м²" loading="lazy" decoding="async">
+                    <div class="portfolio-overlay"><span>Таунхаус 160 м² · Ленинградская обл.</span></div>
+                </div>
+                <div class="portfolio-item item-md" data-category="houses">
+                    <img src="images/portfolio/15.jpg" alt="Дуплекс 220 м²" loading="lazy" decoding="async">
+                    <div class="portfolio-overlay"><span>Дуплекс 220 м² · Краснодар</span></div>
+                </div>
+                <div class="portfolio-item item-lg" data-category="houses">
+                    <img src="images/portfolio/16.jpg" alt="Вилла 420 м²" loading="lazy" decoding="async">
+                    <div class="portfolio-overlay"><span>Вилла 420 м² · Сочи</span></div>
+                </div>
+                <div class="portfolio-item item-sm" data-category="houses">
+                    <img src="images/portfolio/17.jpg" alt="Дом в стиле шале 190 м²" loading="lazy" decoding="async">
+                    <div class="portfolio-overlay"><span>Шале 190 м² · Алтай</span></div>
+                </div>
+                <div class="portfolio-item item-sm" data-category="houses">
+                    <img src="images/portfolio/18.jpg" alt="Коттедж 240 м²" loading="lazy" decoding="async">
+                    <div class="portfolio-overlay"><span>Коттедж 240 м² · Татарстан</span></div>
+                </div>
+                <div class="portfolio-item item-md" data-category="houses">
+                    <img src="images/portfolio/19.jpg" alt="Дом с бассейном 310 м²" loading="lazy" decoding="async">
+                    <div class="portfolio-overlay"><span>Дом с бассейном 310 м² · Крым</span></div>
+                </div>
+                <div class="portfolio-item item-xs" data-category="houses">
+                    <img src="images/portfolio/20.jpg" alt="Гостевой дом 80 м²" loading="lazy" decoding="async">
+                    <div class="portfolio-overlay"><span>Гостевой дом 80 м² · Карелия</span></div>
+                </div>
+                <div class="portfolio-item item-xs" data-category="houses">
+                    <img src="images/portfolio/21.jpg" alt="Дом-барнхаус 175 м²" loading="lazy" decoding="async">
+                    <div class="portfolio-overlay"><span>Барнхаус 175 м² · Подмосковье</span></div>
+                </div>
+                <div class="portfolio-item item-lg" data-category="houses">
+                    <img src="images/portfolio/22.jpg" alt="Усадьба 500 м²" loading="lazy" decoding="async">
+                    <div class="portfolio-overlay"><span>Усадьба 500 м² · Тверская обл.</span></div>
+                </div>
+
+                <!-- Коммерция (23-27) -->
+                <div class="portfolio-item item-lg" data-category="commercial">
+                    <img src="images/portfolio/23.jpg" alt="Ресторан 180 м²" loading="lazy" decoding="async">
+                    <div class="portfolio-overlay"><span>Ресторан 180 м² · Москва</span></div>
+                </div>
+                <div class="portfolio-item item-md" data-category="commercial">
+                    <img src="images/portfolio/24.jpg" alt="Офисное пространство 220 м²" loading="lazy" decoding="async">
+                    <div class="portfolio-overlay"><span>Офис 220 м² · СПб</span></div>
+                </div>
+                <div class="portfolio-item item-md" data-category="commercial">
+                    <img src="images/portfolio/25.jpg" alt="Бутик 95 м²" loading="lazy" decoding="async">
+                    <div class="portfolio-overlay"><span>Бутик 95 м² · Москва</span></div>
+                </div>
+                <div class="portfolio-item item-sm" data-category="commercial">
+                    <img src="images/portfolio/26.jpg" alt="Коворкинг 300 м²" loading="lazy" decoding="async">
+                    <div class="portfolio-overlay"><span>Коворкинг 300 м² · Екатеринбург</span></div>
+                </div>
+                <div class="portfolio-item item-sm" data-category="commercial">
+                    <img src="images/portfolio/27.jpg" alt="Спа-салон 140 м²" loading="lazy" decoding="async">
+                    <div class="portfolio-overlay"><span>Спа-салон 140 м² · Казань</span></div>
+                </div>
+
+                <!-- Интерьеры / Детали (28-31) -->
+                <div class="portfolio-item item-xs" data-category="interiors">
+                    <img src="images/portfolio/28.jpg" alt="Кухня-гостиная" loading="lazy" decoding="async">
+                    <div class="portfolio-overlay"><span>Кухня-гостиная</span></div>
+                </div>
+                <div class="portfolio-item item-xs" data-category="interiors">
+                    <img src="images/portfolio/29.jpg" alt="Спальня в сканди-стиле" loading="lazy" decoding="async">
+                    <div class="portfolio-overlay"><span>Спальня · Сканди</span></div>
+                </div>
+                <div class="portfolio-item item-sm" data-category="interiors">
+                    <img src="images/portfolio/30.jpg" alt="Ванная комната с мрамором" loading="lazy" decoding="async">
+                    <div class="portfolio-overlay"><span>Ванная · Мрамор</span></div>
+                </div>
+                <div class="portfolio-item item-sm" data-category="interiors">
+                    <img src="images/portfolio/31.jpg" alt="Гардеробная система" loading="lazy" decoding="async">
+                    <div class="portfolio-overlay"><span>Гардеробная</span></div>
+                </div>
+            </div>
+
+            <!-- Load More Button -->
+            <div style="text-align:center;margin-top:40px;">
+                <button class="btn btn-outline" id="loadMoreBtn" style="padding:12px 32px;">
+                    Показать ещё работы
+                </button>
             </div>
         </div>
     </section>
@@ -417,7 +553,7 @@
                     <div class="price">Бесплатно</div>
                     <div class="btn-group">
                         <a href="https://wa.me/79001234567?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%9C%D0%B5%D0%BD%D1%8F%20%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D0%B5%D1%81%D1%83%D0%B5%D1%82%20%D0%BA%D0%BE%D0%BD%D1%81%D1%83%D0%BB%D1%8C%D1%82%D0%B0%D1%86%D0%B8%D1%8F%20%D0%B4%D0%B8%D0%B7%D0%B0%D0%B9%D0%BD%D0%B5%D1%80%D0%B0." target="_blank" class="btn btn-whatsapp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>WhatsApp</a>
-                        <a href="https://t.me/accentbureau?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%9C%D0%B5%D0%BD%D1%8F%20%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D0%B5%D1%83%D0%B5%D1%82%20%D0%BA%D0%BE%D0%BD%D1%81%D1%83%D0%BB%D1%8C%D1%82%D0%B0%D1%86%D0%B8%D1%8F%20%D0%B4%D0%B8%D0%B7%D0%B0%D0%B9%D0%BD%D0%B5%D1%80%D0%B0." target="_blank" class="btn btn-telegram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>Telegram</a>
+                        <a href="https://t.me/accentbureau?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%9C%D0%B5%D0%BD%D1%8F%20%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D0%B5%D1%81%D1%83%D0%B5%D1%82%20%D0%BA%D0%BE%D0%BD%D1%81%D1%83%D0%BB%D1%8C%D1%82%D0%B0%D1%86%D0%B8%D1%8F%20%D0%B4%D0%B8%D0%B7%D0%B0%D0%B9%D0%BD%D0%B5%D1%80%D0%B0." target="_blank" class="btn btn-telegram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>Telegram</a>
                     </div>
                 </div>
             </div>
@@ -483,7 +619,7 @@
                             <div class="video-play-btn"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
                             <span class="video-label">Видео: Процесс комплектации</span>
                         </div>
-                        <iframe class="video-iframe" id="videoIframe1" src="https://rutube.ru/play/embed/86e73646c4688f03ce9f889162b5c1cd/" style="border: none;" allow="clipboard-write; autoplay" allowfullscreen loading="lazy"></iframe>
+                        <iframe class="video-iframe" id="videoIframe1" src="" style="border: none;" allow="clipboard-write; autoplay" allowfullscreen loading="lazy"></iframe>
                     </div>
                     
                     <!-- Видео 2: Работа с поставщиками -->
@@ -492,7 +628,7 @@
                             <div class="video-play-btn"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
                             <span class="video-label">Видео: Работа с поставщиками</span>
                         </div>
-                        <iframe class="video-iframe" id="videoIframe2" src="https://rutube.ru/play/embed/19ec84491e5589e92a74b06dca85de3f/" style="border: none;" allow="clipboard-write; autoplay" allowfullscreen loading="lazy"></iframe>
+                        <iframe class="video-iframe" id="videoIframe2" src="" style="border: none;" allow="clipboard-write; autoplay" allowfullscreen loading="lazy"></iframe>
                     </div>
                     
                     <button class="btn btn-primary" onclick="openModal('costEquipment')">Обсудить проект</button>
@@ -622,17 +758,14 @@
         document.querySelectorAll('input[type="tel"]').forEach(input => { input.addEventListener('input', function(e) { let v = e.target.value.replace(/\D/g, ''); if (v.startsWith('7') || v.startsWith('8')) v = v.substring(1); let f = '+7'; if (v.length > 0) f += ' (' + v.substring(0, 3); if (v.length >= 3) f += ') ' + v.substring(3, 6); if (v.length >= 6) f += '-' + v.substring(6, 8); if (v.length >= 8) f += '-' + v.substring(8, 10); e.target.value = f; }); });
         document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModalDirect(); closeDetailsModalDirect(); if(lightbox.classList.contains('active')) closeLightbox(); } });
 
-        // Video Logic - Support for 2 videos
+        // Video Logic
         function playVideo(iframeId) {
             const iframe = document.getElementById(iframeId);
             const block = iframe.closest('.video-block');
-            
-            // Rutube embed URLs
             const videoUrls = {
                 'videoIframe1': 'https://rutube.ru/play/embed/86e73646c4688f03ce9f889162b5c1cd/',
                 'videoIframe2': 'https://rutube.ru/play/embed/19ec84491e5589e92a74b06dca85de3f/'
             };
-            
             if (videoUrls[iframeId] && !iframe.src) {
                 iframe.src = videoUrls[iframeId];
             }
@@ -666,6 +799,60 @@
 
         lightboxClose.addEventListener('click', (e) => { e.stopPropagation(); closeLightbox(); });
         lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+
+        // Portfolio Filter Logic
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const portfolioItems = document.querySelectorAll('.portfolio-item');
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
+        let visibleCount = 12;
+
+        function filterPortfolio(category) {
+            let shown = 0;
+            portfolioItems.forEach(item => {
+                const itemCat = item.dataset.category;
+                if (category === 'all' || itemCat === category) {
+                    item.classList.remove('filtered-out');
+                    item.style.position = '';
+                    shown++;
+                    if (shown > visibleCount) {
+                        item.classList.add('filtered-out');
+                        item.style.position = 'absolute';
+                    }
+                } else {
+                    item.classList.add('filtered-out');
+                    item.style.position = 'absolute';
+                }
+            });
+            const totalInCategory = category === 'all' 
+                ? portfolioItems.length 
+                : document.querySelectorAll(`[data-category="${category}"]`).length;
+            loadMoreBtn.style.display = (totalInCategory > visibleCount) ? 'inline-flex' : 'none';
+            loadMoreBtn.dataset.category = category;
+        }
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                visibleCount = 12;
+                filterPortfolio(btn.dataset.filter);
+            });
+        });
+
+        loadMoreBtn.addEventListener('click', () => {
+            visibleCount += 6;
+            const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+            filterPortfolio(activeFilter);
+            const totalInCategory = activeFilter === 'all' 
+                ? portfolioItems.length 
+                : document.querySelectorAll(`[data-category="${activeFilter}"]`).length;
+            if (visibleCount >= totalInCategory) {
+                loadMoreBtn.style.display = 'none';
+            }
+        });
+
+        // Init
+        filterPortfolio('all');
 
         window.openModal = openModal; window.closeModal = closeModal; window.closeModalDirect = closeModalDirect;
         window.closeDetailsModal = closeDetailsModal; window.closeDetailsModalDirect = closeDetailsModalDirect;

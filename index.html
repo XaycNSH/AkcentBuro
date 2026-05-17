@@ -37,6 +37,8 @@
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
         }
+        
+        body.lightbox-open { overflow: hidden; }
 
         .container { max-width: 1320px; margin: 0 auto; padding: 0 40px; }
 
@@ -166,6 +168,37 @@
         .item-tall { grid-column: span 2; grid-row: span 4; }
         .item-wide { grid-column: span 3; grid-row: span 2; }
 
+        /* Lightbox */
+        .lightbox {
+            position: fixed; inset: 0; z-index: 3000;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(26, 26, 46, 0.92);
+            backdrop-filter: blur(8px);
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+        .lightbox.active { opacity: 1; visibility: visible; }
+        .lightbox-content {
+            position: relative; max-width: 90vw; max-height: 90vh;
+            transform: scale(0.9); transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .lightbox.active .lightbox-content { transform: scale(1); }
+        .lightbox-content img {
+            max-width: 100%; max-height: 90vh;
+            border-radius: 4px; box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            object-fit: contain; display: block;
+        }
+        .lightbox-close {
+            position: absolute; top: -16px; right: -16px;
+            width: 44px; height: 44px;
+            background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 50%; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s ease; color: white; z-index: 1;
+        }
+        .lightbox-close:hover { background: rgba(255,255,255,0.25); transform: rotate(90deg); }
+        .lightbox-close svg { width: 20px; height: 20px; }
+
         /* Services */
         .services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
         .service-card {
@@ -194,14 +227,9 @@
             cursor: pointer; border: none; transition: var(--transition);
             font-family: 'Inter', sans-serif; letter-spacing: 0.5px;
         }
-        .btn-primary {
-            background: var(--color-primary); color: white;
-        }
+        .btn-primary { background: var(--color-primary); color: white; }
         .btn-primary:hover { background: var(--color-primary-dark); transform: translateY(-2px); box-shadow: var(--shadow-md); }
-        .btn-outline {
-            background: transparent; color: var(--color-primary);
-            border: 1px solid var(--color-border);
-        }
+        .btn-outline { background: transparent; color: var(--color-primary); border: 1px solid var(--color-border); }
         .btn-outline:hover { border-color: var(--color-primary); background: rgba(44,81,211,0.04); }
         .btn-group { display: flex; gap: 12px; flex-wrap: wrap; }
         .btn-whatsapp { background: #25D366; color: white; }
@@ -227,10 +255,7 @@
         }
         .tariff-card:hover { box-shadow: var(--shadow-md); border-color: var(--color-primary); }
         .tariff-card.featured { border-color: var(--color-primary); background: var(--color-off-white); }
-        .tariff-name {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem; font-weight: 400; margin-bottom: 12px;
-        }
+        .tariff-name { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 400; margin-bottom: 12px; }
         .tariff-desc { font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.7; margin-bottom: 16px; }
         .tariff-time { font-size: 0.78rem; color: var(--color-primary); font-weight: 500; margin-bottom: 20px; display: flex; align-items: center; gap: 6px; }
         .tariff-features { list-style: none; margin-bottom: 24px; }
@@ -265,13 +290,8 @@
         }
         .video-play-btn:hover { transform: scale(1.1); box-shadow: 0 12px 40px rgba(44,81,211,0.4); }
         .video-play-btn svg { width: 28px; height: 28px; fill: white; margin-left: 4px; }
-        .video-label {
-            position: absolute; bottom: 24px; left: 24px;
-            font-size: 0.78rem; color: var(--color-text-secondary); letter-spacing: 0.5px;
-        }
-        .video-iframe {
-            width: 100%; height: 100%; border: none; position: absolute; inset: 0; display: none;
-        }
+        .video-label { position: absolute; bottom: 24px; left: 24px; font-size: 0.78rem; color: var(--color-text-secondary); letter-spacing: 0.5px; }
+        .video-iframe { width: 100%; height: 100%; border: none; position: absolute; inset: 0; display: none; }
         .video-block.active .video-placeholder { display: none; }
         .video-block.active .video-iframe { display: block; }
 
@@ -289,18 +309,15 @@
         .stage-content p { font-size: 0.88rem; color: var(--color-text-secondary); line-height: 1.7; }
 
         /* CTA */
-        .cta-section {
-            background: var(--color-text); color: var(--color-white); padding: 100px 0; text-align: center;
-        }
+        .cta-section { background: var(--color-text); color: var(--color-white); padding: 100px 0; text-align: center; }
         .cta-content { max-width: 600px; margin: 0 auto; }
         .cta-content p { color: rgba(255,255,255,0.6); font-size: 0.95rem; line-height: 1.8; margin-bottom: 36px; font-weight: 300; }
         .cta-btn {
             display: inline-flex; align-items: center; gap: 12px;
-            padding: 18px 44px;
-            background: var(--color-primary); color: white; border: none; border-radius: var(--radius);
+            padding: 18px 44px; background: var(--color-primary); color: white;
+            border: none; border-radius: var(--radius);
             font-size: 0.95rem; font-weight: 500; cursor: pointer;
-            transition: var(--transition); font-family: 'Inter', sans-serif;
-            letter-spacing: 0.5px;
+            transition: var(--transition); font-family: 'Inter', sans-serif; letter-spacing: 0.5px;
         }
         .cta-btn:hover { background: var(--color-primary-dark); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(44,81,211,0.4); }
 
@@ -334,9 +351,8 @@
         @keyframes modalIn { from { opacity: 0; transform: scale(0.95) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
         .modal-close {
             position: absolute; top: 16px; right: 16px;
-            width: 36px; height: 36px; border: none;
-            background: var(--color-off-white); border-radius: 50%;
-            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            width: 36px; height: 36px; border: none; background: var(--color-off-white);
+            border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
         }
         .modal h3 { font-size: 1.3rem; font-weight: 500; margin-bottom: 6px; }
         .modal > p { font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 20px; }
@@ -349,8 +365,8 @@
         }
         .form-group input:focus { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(44,81,211,0.08); }
         .form-submit {
-            width: 100%; padding: 14px; background: var(--color-primary);
-            color: white; border: none; border-radius: var(--radius);
+            width: 100%; padding: 14px; background: var(--color-primary); color: white;
+            border: none; border-radius: var(--radius);
             font-size: 0.9rem; font-weight: 500; cursor: pointer;
             font-family: 'Inter', sans-serif; transition: var(--transition);
         }
@@ -362,10 +378,7 @@
             .tariffs-grid { grid-template-columns: 1fr; max-width: 440px; margin-left: auto; margin-right: auto; }
             .portfolio-grid { grid-template-columns: repeat(4, 1fr); grid-auto-rows: 70px; }
             .item-lg { grid-column: span 2; grid-row: span 3; }
-            .item-md { grid-column: span 2; grid-row: span 2; }
-            .item-sm { grid-column: span 2; grid-row: span 2; }
-            .item-tall { grid-column: span 2; grid-row: span 3; }
-            .item-wide { grid-column: span 2; grid-row: span 2; }
+            .item-md, .item-sm { grid-column: span 2; grid-row: span 2; }
         }
 
         @media (max-width: 768px) {
@@ -385,7 +398,6 @@
             .item-md, .item-sm, .item-tall, .item-wide { grid-column: span 2; grid-row: span 2; }
             .item-xs { grid-column: span 1; grid-row: span 2; }
             .stage-item { gap: 20px; padding: 24px 0; }
-            .stage-num { width: 40px; height: 40px; font-size: 0.85rem; }
             .modal { padding: 28px; }
         }
 
@@ -440,37 +452,37 @@
                 которые вдохновляют каждый день.
             </p>
             <div class="portfolio-grid reveal">
-                <div class="portfolio-item item-lg"><img src="https://placehold.co/800x640/E0DAE2/6B6B80?text=Проект+1" alt=""><div class="portfolio-overlay"><span>Квартира 120 м² · Москва</span></div></div>
-                <div class="portfolio-item item-lg"><img src="https://placehold.co/800x640/2C51D3/FFFFFF?text=Проект+2" alt=""><div class="portfolio-overlay"><span>Дом 280 м² · Подмосковье</span></div></div>
-                <div class="portfolio-item item-lg"><img src="https://placehold.co/800x640/F0EDF5/6B6B80?text=Проект+3" alt=""><div class="portfolio-overlay"><span>Пентхаус 200 м² · Санкт-Петербург</span></div></div>
-                <div class="portfolio-item item-sm"><img src="https://placehold.co/600x400/E8E4ED/6B6B80?text=Проект+4" alt=""><div class="portfolio-overlay"><span>Студия 45 м²</span></div></div>
-                <div class="portfolio-item item-sm"><img src="https://placehold.co/600x400/2C51D3/FFFFFF?text=Проект+5" alt=""><div class="portfolio-overlay"><span>Кухня-гостиная</span></div></div>
-                <div class="portfolio-item item-md"><img src="https://placehold.co/600x400/F0EDF5/6B6B80?text=Проект+6" alt=""><div class="portfolio-overlay"><span>Спальня 28 м²</span></div></div>
-                <div class="portfolio-item item-xs"><img src="https://placehold.co/400x320/E0DAE2/6B6B80?text=Проект+7" alt=""><div class="portfolio-overlay"><span>Ванная комната</span></div></div>
-                <div class="portfolio-item item-xs"><img src="https://placehold.co/400x320/2C51D3/FFFFFF?text=Проект+8" alt=""><div class="portfolio-overlay"><span>Прихожая</span></div></div>
-                <div class="portfolio-item item-md"><img src="https://placehold.co/600x400/E8E4ED/6B6B80?text=Проект+9" alt=""><div class="portfolio-overlay"><span>Офисное пространство</span></div></div>
-                <div class="portfolio-item item-lg"><img src="https://placehold.co/800x640/F0EDF5/6B6B80?text=Проект+10" alt=""><div class="portfolio-overlay"><span>Загородный дом 350 м²</span></div></div>
-                <div class="portfolio-item item-sm"><img src="https://placehold.co/600x400/2C51D3/FFFFFF?text=Проект+11" alt=""><div class="portfolio-overlay"><span>Детская комната</span></div></div>
-                <div class="portfolio-item item-sm"><img src="https://placehold.co/600x400/E0DAE2/6B6B80?text=Проект+12" alt=""><div class="portfolio-overlay"><span>Кабинет</span></div></div>
-                <div class="portfolio-item item-lg"><img src="https://placehold.co/800x640/E8E4ED/6B6B80?text=Проект+13" alt=""><div class="portfolio-overlay"><span>Ресторан 180 м²</span></div></div>
-                <div class="portfolio-item item-md"><img src="https://placehold.co/600x400/F0EDF5/6B6B80?text=Проект+14" alt=""><div class="portfolio-overlay"><span>Апартаменты 90 м²</span></div></div>
-                <div class="portfolio-item item-md"><img src="https://placehold.co/600x400/2C51D3/FFFFFF?text=Проект+15" alt=""><div class="portfolio-overlay"><span>Лофт 140 м²</span></div></div>
-                <div class="portfolio-item item-sm"><img src="https://placehold.co/600x400/E0DAE2/6B6B80?text=Проект+16" alt=""><div class="portfolio-overlay"><span>Гардеробная</span></div></div>
-                <div class="portfolio-item item-sm"><img src="https://placehold.co/600x400/E8E4ED/6B6B80?text=Проект+17" alt=""><div class="portfolio-overlay"><span>Балкон-терраса</span></div></div>
-                <div class="portfolio-item item-lg"><img src="https://placehold.co/800x640/2C51D3/FFFFFF?text=Проект+18" alt=""><div class="portfolio-overlay"><span>Вилла 420 м²</span></div></div>
-                <div class="portfolio-item item-md"><img src="https://placehold.co/600x400/F0EDF5/6B6B80?text=Проект+19" alt=""><div class="portfolio-overlay"><span>Таунхаус 160 м²</span></div></div>
-                <div class="portfolio-item item-xs"><img src="https://placehold.co/400x320/E0DAE2/6B6B80?text=Проект+20" alt=""><div class="portfolio-overlay"><span>Санузел</span></div></div>
-                <div class="portfolio-item item-xs"><img src="https://placehold.co/400x320/E8E4ED/6B6B80?text=Проект+21" alt=""><div class="portfolio-overlay"><span>Коридор</span></div></div>
-                <div class="portfolio-item item-sm"><img src="https://placehold.co/600x400/2C51D3/FFFFFF?text=Проект+22" alt=""><div class="portfolio-overlay"><span>Гостиная</span></div></div>
-                <div class="portfolio-item item-sm"><img src="https://placehold.co/600x400/F0EDF5/6B6B80?text=Проект+23" alt=""><div class="portfolio-overlay"><span>Столовая</span></div></div>
-                <div class="portfolio-item item-lg"><img src="https://placehold.co/800x640/E0DAE2/6B6B80?text=Проект+24" alt=""><div class="portfolio-overlay"><span>Дуплекс 220 м²</span></div></div>
-                <div class="portfolio-item item-md"><img src="https://placehold.co/600x400/E8E4ED/6B6B80?text=Проект+25" alt=""><div class="portfolio-overlay"><span>Библиотека</span></div></div>
-                <div class="portfolio-item item-md"><img src="https://placehold.co/600x400/2C51D3/FFFFFF?text=Проект+26" alt=""><div class="portfolio-overlay"><span>Кинозал</span></div></div>
-                <div class="portfolio-item item-sm"><img src="https://placehold.co/600x400/F0EDF5/6B6B80?text=Проект+27" alt=""><div class="portfolio-overlay"><span>Терраса</span></div></div>
-                <div class="portfolio-item item-sm"><img src="https://placehold.co/600x400/E0DAE2/6B6B80?text=Проект+28" alt=""><div class="portfolio-overlay"><span>Бассейн</span></div></div>
-                <div class="portfolio-item item-lg"><img src="https://placehold.co/800x640/2C51D3/FFFFFF?text=Проект+29" alt=""><div class="portfolio-overlay"><span>Пентхаус 300 м²</span></div></div>
-                <div class="portfolio-item item-md"><img src="https://placehold.co/600x400/E8E4ED/6B6B80?text=Проект+30" alt=""><div class="portfolio-overlay"><span>Фитнес-зона</span></div></div>
-                <div class="portfolio-item item-md"><img src="https://placehold.co/600x400/F0EDF5/6B6B80?text=Проект+31" alt=""><div class="portfolio-overlay"><span>Сауна</span></div></div>
+                <div class="portfolio-item item-lg"><img src="images/portfolio/1.jpg" alt="Проект 1"><div class="portfolio-overlay"><span>Квартира 120 м² · Москва</span></div></div>
+                <div class="portfolio-item item-lg"><img src="images/portfolio/2.jpg" alt="Проект 2"><div class="portfolio-overlay"><span>Дом 280 м² · Подмосковье</span></div></div>
+                <div class="portfolio-item item-lg"><img src="images/portfolio/3.jpg" alt="Проект 3"><div class="portfolio-overlay"><span>Пентхаус 200 м² · Санкт-Петербург</span></div></div>
+                <div class="portfolio-item item-sm"><img src="images/portfolio/4.jpg" alt="Проект 4"><div class="portfolio-overlay"><span>Студия 45 м²</span></div></div>
+                <div class="portfolio-item item-sm"><img src="images/portfolio/5.jpg" alt="Проект 5"><div class="portfolio-overlay"><span>Кухня-гостиная</span></div></div>
+                <div class="portfolio-item item-md"><img src="images/portfolio/6.jpg" alt="Проект 6"><div class="portfolio-overlay"><span>Спальня 28 м²</span></div></div>
+                <div class="portfolio-item item-xs"><img src="images/portfolio/7.jpg" alt="Проект 7"><div class="portfolio-overlay"><span>Ванная комната</span></div></div>
+                <div class="portfolio-item item-xs"><img src="images/portfolio/8.jpg" alt="Проект 8"><div class="portfolio-overlay"><span>Прихожая</span></div></div>
+                <div class="portfolio-item item-md"><img src="images/portfolio/9.jpg" alt="Проект 9"><div class="portfolio-overlay"><span>Офисное пространство</span></div></div>
+                <div class="portfolio-item item-lg"><img src="images/portfolio/10.jpg" alt="Проект 10"><div class="portfolio-overlay"><span>Загородный дом 350 м²</span></div></div>
+                <div class="portfolio-item item-sm"><img src="images/portfolio/11.jpg" alt="Проект 11"><div class="portfolio-overlay"><span>Детская комната</span></div></div>
+                <div class="portfolio-item item-sm"><img src="images/portfolio/12.jpg" alt="Проект 12"><div class="portfolio-overlay"><span>Кабинет</span></div></div>
+                <div class="portfolio-item item-lg"><img src="images/portfolio/13.jpg" alt="Проект 13"><div class="portfolio-overlay"><span>Ресторан 180 м²</span></div></div>
+                <div class="portfolio-item item-md"><img src="images/portfolio/14.jpg" alt="Проект 14"><div class="portfolio-overlay"><span>Апартаменты 90 м²</span></div></div>
+                <div class="portfolio-item item-md"><img src="images/portfolio/15.jpg" alt="Проект 15"><div class="portfolio-overlay"><span>Лофт 140 м²</span></div></div>
+                <div class="portfolio-item item-sm"><img src="images/portfolio/16.jpg" alt="Проект 16"><div class="portfolio-overlay"><span>Гардеробная</span></div></div>
+                <div class="portfolio-item item-sm"><img src="images/portfolio/17.jpg" alt="Проект 17"><div class="portfolio-overlay"><span>Балкон-терраса</span></div></div>
+                <div class="portfolio-item item-lg"><img src="images/portfolio/18.jpg" alt="Проект 18"><div class="portfolio-overlay"><span>Вилла 420 м²</span></div></div>
+                <div class="portfolio-item item-md"><img src="images/portfolio/19.jpg" alt="Проект 19"><div class="portfolio-overlay"><span>Таунхаус 160 м²</span></div></div>
+                <div class="portfolio-item item-xs"><img src="images/portfolio/20.jpg" alt="Проект 20"><div class="portfolio-overlay"><span>Санузел</span></div></div>
+                <div class="portfolio-item item-xs"><img src="images/portfolio/21.jpg" alt="Проект 21"><div class="portfolio-overlay"><span>Коридор</span></div></div>
+                <div class="portfolio-item item-sm"><img src="images/portfolio/22.jpg" alt="Проект 22"><div class="portfolio-overlay"><span>Гостиная</span></div></div>
+                <div class="portfolio-item item-sm"><img src="images/portfolio/23.jpg" alt="Проект 23"><div class="portfolio-overlay"><span>Столовая</span></div></div>
+                <div class="portfolio-item item-lg"><img src="images/portfolio/24.jpg" alt="Проект 24"><div class="portfolio-overlay"><span>Дуплекс 220 м²</span></div></div>
+                <div class="portfolio-item item-md"><img src="images/portfolio/25.jpg" alt="Проект 25"><div class="portfolio-overlay"><span>Библиотека</span></div></div>
+                <div class="portfolio-item item-md"><img src="images/portfolio/26.jpg" alt="Проект 26"><div class="portfolio-overlay"><span>Кинозал</span></div></div>
+                <div class="portfolio-item item-sm"><img src="images/portfolio/27.jpg" alt="Проект 27"><div class="portfolio-overlay"><span>Терраса</span></div></div>
+                <div class="portfolio-item item-sm"><img src="images/portfolio/28.jpg" alt="Проект 28"><div class="portfolio-overlay"><span>Бассейн</span></div></div>
+                <div class="portfolio-item item-lg"><img src="images/portfolio/29.jpg" alt="Проект 29"><div class="portfolio-overlay"><span>Пентхаус 300 м²</span></div></div>
+                <div class="portfolio-item item-md"><img src="images/portfolio/30.jpg" alt="Проект 30"><div class="portfolio-overlay"><span>Фитнес-зона</span></div></div>
+                <div class="portfolio-item item-md"><img src="images/portfolio/31.jpg" alt="Проект 31"><div class="portfolio-overlay"><span>Сауна</span></div></div>
             </div>
         </div>
     </section>
@@ -485,7 +497,6 @@
                 <p class="section-subtitle">Гибкие решения для создания идеального интерьера — от планировки до полной реализации</p>
             </div>
             <div class="services-grid">
-                <!-- Card 1: Planning - Light Style -->
                 <div class="service-card reveal">
                     <h3>Разработка планировочного решения</h3>
                     <p>Сомневаетесь как правильно зонировать пространство или разместить мебель? Мы разработаем для вас от 3-х вариантов планировочного решения.</p>
@@ -509,8 +520,6 @@
                         </a>
                     </div>
                 </div>
-
-                <!-- Card 2: Consultation - Same Light Style -->
                 <div class="service-card reveal">
                     <h3>Консультация дизайнера</h3>
                     <p>Собираетесь делать ремонт, в голове куча идей, но не знаете с чего начать? Наш профессиональный дизайнер с удовольствием проконсультирует вас по всем вопросам.</p>
@@ -634,18 +643,13 @@
                 <div class="support-card reveal">
                     <h3>Комплектация объекта</h3>
                     <p>Мы возьмём на себя закупку материалов, подбор мебели и элементов декора. Вы получаете гарантированные скидки от проверенных поставщиков.</p>
-
-                    <!-- Video Block -->
                     <div class="video-block" id="videoBlock" onclick="playVideo()">
                         <div class="video-placeholder">
-                            <div class="video-play-btn">
-                                <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
-                            </div>
+                            <div class="video-play-btn"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
                             <span class="video-label">Видео о процессе комплектации</span>
                         </div>
                         <iframe class="video-iframe" id="videoIframe" src="" allowfullscreen></iframe>
                     </div>
-
                     <button class="btn btn-primary" onclick="openModal('costEquipment')">Обсудить проект</button>
                 </div>
             </div>
@@ -700,6 +704,19 @@
         </div>
     </footer>
 
+    <!-- Lightbox HTML -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" aria-label="Закрыть">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+        </button>
+        <div class="lightbox-content">
+            <img src="" alt="" id="lightbox-img">
+        </div>
+    </div>
+
     <!-- Modals -->
     <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
         <div class="modal" onclick="event.stopPropagation()">
@@ -730,6 +747,7 @@
     </div>
 
     <script>
+        // Nav & Scroll Logic
         const navBurger = document.getElementById('navBurger');
         const navLinks = document.getElementById('navLinks');
         navBurger.addEventListener('click', () => { navBurger.classList.toggle('active'); navLinks.classList.toggle('active'); });
@@ -738,6 +756,7 @@
         const observer = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), {threshold:0.08});
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
+        // Modal Logic
         function openModal(type) {
             if (['detailsLight','detailsComfort','detailsPremium','detailsSupervision'].includes(type)) {
                 const details = {
@@ -790,14 +809,43 @@
             });
         });
 
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModalDirect(); closeDetailsModalDirect(); } });
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') { closeModalDirect(); closeDetailsModalDirect(); if(lightbox.classList.contains('active')) closeLightbox(); }
+        });
 
+        // Video Logic
         function playVideo() {
             const block = document.getElementById('videoBlock');
             const iframe = document.getElementById('videoIframe');
             block.classList.add('active');
             iframe.src = 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1';
         }
+
+        // Lightbox Logic
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxClose = document.querySelector('.lightbox-close');
+
+        function openLightbox(src, alt) {
+            lightboxImg.src = src;
+            lightboxImg.alt = alt;
+            lightbox.classList.add('active');
+            document.body.classList.add('lightbox-open');
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            document.body.classList.remove('lightbox-open');
+            setTimeout(() => { lightboxImg.src = ''; }, 400);
+        }
+
+        document.querySelectorAll('.portfolio-item img').forEach(img => {
+            img.style.cursor = 'pointer';
+            img.addEventListener('click', () => openLightbox(img.src, img.alt));
+        });
+
+        lightboxClose.addEventListener('click', (e) => { e.stopPropagation(); closeLightbox(); });
+        lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
 
         window.openModal = openModal;
         window.closeModal = closeModal;
@@ -806,7 +854,7 @@
         window.closeDetailsModalDirect = closeDetailsModalDirect;
         window.submitForm = submitForm;
         window.playVideo = playVideo;
+        window.closeLightbox = closeLightbox;
     </script>
 </body>
 </html>
-
